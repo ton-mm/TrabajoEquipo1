@@ -17,6 +17,8 @@ public class TrabajoEquipo1 {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        tarea juego = new tarea();
+        juego.setVisible(true);
     }
     
 }
