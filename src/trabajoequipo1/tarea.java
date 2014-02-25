@@ -35,8 +35,8 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
     private Image dbImage;      // Imagen a proyectar  
     private Image gameover;
     private Graphics dbg;       // Objeto grafico
-    private SoundClip sonido;    // Objeto AudioClip
-    private SoundClip rat;    // Objeto AudioClip
+    private SoundClip yay;    // Objeto AudioClip
+    private SoundClip buuu;    // Objeto AudioClip
     private SoundClip bomb;    //Objeto AudioClip
     private SoundClip teleport;
     private Bueno pelota;    // Objeto de la clase Bueno
@@ -60,6 +60,7 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
     private double velocidadx,velocidady;
     private double gravedad = 9.8;
     private double tiempo;
+    private boolean btiempo;
     
     
     //Variables de control de tiempo de la animación
@@ -75,9 +76,9 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
     
     public void init() {
         direccion = 0;
-        this.setSize(900, 700);
+        this.setSize(1000, 700);
         URL eURL = this.getClass().getResource("Imagenes/bola.png");
-        int dposy = getHeight() / 2;
+        int dposy = getHeight() / 2 + getHeight() / 8;
         pelota = new Bueno(15, dposy , Toolkit.getDefaultToolkit().getImage(eURL));
         //pelota.setPosX((int) (getWidth()/2));
         //pelota.setPosY(getHeight());
@@ -93,37 +94,28 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
         gameover = Toolkit.getDefaultToolkit().getImage(goURL);
        
         //Se cargan los sonidos.
-        sonido = new SoundClip("Sonidos/mice.wav");
-        bomb = new SoundClip("Sonidos/Explosion.wav");
+        yay = new SoundClip("Sonidos/yay.wav");
+        buuu = new SoundClip("Sonidos/buuu.wav");
         teleport = new SoundClip("Sonidos/teleport.wav");
  
-        
         elefante = new ImageIcon(Toolkit.getDefaultToolkit().getImage(eURL));
         ancho = elefante.getIconWidth();
         alto = elefante.getIconHeight();
         //ancho2 = caja.getIconWidth();
         // alto2 = caja.getIconHeight();
         addMouseListener(this);
-        addMouseMotionListener(this);  
+        addMouseMotionListener(this); 
         
         // variable de la pelota
-        angulo = (int) ((Math.random() * (50 - 25)) + 25);
+            angulo = (int) ((Math.random() * (60 - 45)) + 45);
  
-        //movimiento de pelota en x
-        velocidad = (int) ((Math.random() * (6 - 4)) + 4);
-        velocidadx =  velocidad * (Math.cos(45));
+            //movimiento de pelota en x
+            velocidad = (int) ((Math.random() * (6 - 4)) + 4);
+        
+        
         
         //movimiento de pelota en y
         //py = -5 + 1 * tiempoActual;
-        
-        
-
-        
-
-        
-        
-        
-  
     }
  
     public void start() {
@@ -160,10 +152,35 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
     
     public void actualiza() {
         
-         //Determina el tiempo que ha transcurrido desde que el Applet 
          
-
-        tiempo += .020;
+        // tiempo de jframe
+        if(btiempo)
+        {
+           tiempo += .020; 
+        }
+       
+        if(intentos == 3)
+        {
+            vidas--;
+            intentos = 0;
+            velocidad += 1;
+        }
+        
+        if(clic)
+        {
+            
+            velocidadx =  velocidad * (Math.sin(Math.toRadians(angulo)));
+        
+            //velocidad de y
+            velocidady = -velocidad + 2.5 * tiempo;
+            
+            //boolean para tiempo
+            btiempo = true;
+            
+            //actualziacion de posicion
+            pelota.setPosX(pelota.getPosX() + (int) velocidadx);
+            pelota.setPosY(pelota.getPosY() + (int) velocidady);
+        }
         
         
         if(left)
@@ -184,90 +201,87 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
             pchoco = false;
         }
         
-        if(intentos == 3)
+        
+        
+        
+        //limita el movimiento de la caja 
+        if(caja.getPosX() <= getWidth()/3)
         {
-            vidas--;
-            intentos = 0;
-            velocidad += 2;
-        }
-        
-        //py = velocidad * pelota.getPosY() * tiempoTranscurrido - (.98 * tiempoTranscurrido) * Math.pow(px, px)
-        
-        //actualiza la posicion de la pelota
-        pelota.setPosX(pelota.getPosX() + (int) velocidadx);
-        pelota.setPosY(pelota.getPosY() + (int) velocidady);
-        
-        velocidady = -velocidad + 2 * tiempo;
-        
-        
-        
-        if(caja.getPosX() <= getWidth()/2)
-        {
-            caja.setPosX(getWidth()/2);
+            caja.setPosX(getWidth()/3);
         }
         if(caja.getPosX() + caja.getAncho() >= getWidth())
         {
             caja.setPosX(getWidth() - caja.getAncho());
         }
-        
-        
-        
-        }
+    
+ }
         
         
     
  
     public void checaColision() {
         
-       /* 
-        if (pelota.getPosX() + pelota.getAncho() > getWidth()) {
-            pelota.setPosX(getWidth() - pelota.getAncho());
-        }
-        else if (pelota.getPosX() < 0) {
-            pelota.setPosX(0);
-        }
-        else if (pelota.getPosY() + pelota.getAlto() > getHeight()) {
-            pelota.setPosY(getHeight() - pelota.getAlto());
-        }
-        else if (pelota.getPosY() < 0) {
-            pelota.setPosY(0);
-        }
-        */
-        
+       
         if(pelota.getPosX() + pelota.getAncho() >= getWidth() || pelota.getPosX() <= 0)
         {
             pchoco = true;
         }
         
         
-         if (pelota.getPosX() >= getWidth()) {
+         if (pelota.getPosX() + pelota.getAncho() >= getWidth()) {
             int posrX = (int) (0);    // posicion en x es un cuarto del applet
-            int posrY = (int) (getHeight() / 2);    // posicion en y es un cuarto del applet
+            int posrY = (int) (getHeight() / 2 + getHeight() / 8);    // posicion en y es un cuarto del applet
             pelota.setPosX(posrX);
             pelota.setPosY(posrY);
+            btiempo = false;
+            tiempo = 0;
+            clic = false;
+            // variable de la pelota
+            angulo = (int) ((Math.random() * (60 - 45)) + 45);
+ 
+            //movimiento de pelota en x
+            velocidad = (int) ((Math.random() * (6 - 4)) + 4);
+            
+            // sonido de buuu
+            buuu.play();
         }
-        if (pelota.getPosY() >= getHeight()) {
+        if (pelota.getPosY() + pelota.getAlto() >= getHeight()) {
             int posrX = (int) (0);    // posicion en x es un cuarto del applet
-            int posrY = (int) (getHeight() / 2);    // posicion en y es un cuarto del applet
+            int posrY = (int) (getHeight() / 2 + getHeight() / 8);    // posicion en y es un cuarto del applet
             pelota.setPosX(posrX);
             pelota.setPosY(posrY);
             intentos++;
+            btiempo = false;
+            tiempo = 0;
+            clic = false;
+            // variable de la pelota
+            angulo = (int) ((Math.random() * (60 - 45)) + 45);
+ 
+            //movimiento de pelota en x
+            velocidad = (int) ((Math.random() * (6 - 4)) + 4);
+            
+            // sonido de buuu
+            buuu.play();
         }
         
          if (pelota.intersecta(caja) && (pelota.getPosY() + pelota.getAlto() - 5) < caja.getPosY()) {
             int posrX = (int) (0);    // posicion en x es un cuarto del applet
-            int posrY = (int) (getHeight() / 2);    // posicion en y es un cuarto del applet
+            int posrY = (int) (getHeight() / 2 + getHeight() / 8);    // posicion en y es un cuarto del applet
             pelota.setPosX(posrX);
             pelota.setPosY(posrY);
             score += 2;
-            // emitir sonido de alegria
+            btiempo = false;
+            tiempo = 0;
+            clic = false;
+            // variable de la pelota
+            angulo = (int) ((Math.random() * (60 - 45)) + 45);
+ 
+            //movimiento de pelota en x
+            velocidad = (int) ((Math.random() * (6 - 4)) + 4);
+            //sonido de yay
+            yay.play();
         }
-
-        
-        
-        
-        
-        
+   
     }
  
     public void paint(Graphics g) {
@@ -311,9 +325,11 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
         
         
         g.setColor(Color.black);
-        g.drawString("Vidas: " + tiempoActual, 50, 20);
+        g.drawString("Vidas: " + vidas, 15, 50);
         g.setColor(Color.black);
-        g.drawString("Score: " + tiempo, 70, 50); 
+        g.drawString("Score: " + score, 70, 50); 
+        g.setColor(Color.black);
+        g.drawString("Int: " + intentos, 120, 50);
         
         /*if (pausa) {
                     g.setColor(Color.white);
