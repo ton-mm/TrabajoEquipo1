@@ -25,6 +25,11 @@ public class Bueno extends Base{
         private static final String desaparece = "DESAPARECE";
         private static final String pausado = "PAUSADO";  
         
+       /* public getpausado()
+        {
+            return pausado;
+        }
+        */
     
 	public Bueno(int posX,int posY,Image image)
         {

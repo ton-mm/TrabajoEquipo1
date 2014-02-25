@@ -48,7 +48,7 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
     private int y1; // posicion del mouse en y
     private int x_pos;
     private int y_pos;
-    private int vidas = 6;
+    private int vidas = 5;
     private int score = 0;
     private boolean pausa = false;
     private boolean clic = false; //para saber cuando hace clic
@@ -56,6 +56,7 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
     private boolean pchoco; // bool pelota choco
     private double angulo; // angulo de la pelota
     private double px,py; // posicion de la pelota con formula
+    private int intentos;
     
     
     //Variables de control de tiempo de la animación
@@ -104,8 +105,7 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
         
         // variable de la pelota
         angulo = (int)((Math.random() * (85 - 35)) + 35);
-        
-        
+ 
         //movimiento de pelota
         velocidad = (int) ((Math.random() * (7 - 3)) + 3);
         px =  velocidad * (Math.cos(angulo));
@@ -129,18 +129,21 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
         //Guarda el tiempo actual del sistema 
         tiempoActual = System.currentTimeMillis();
         
-        while (vidas > 0) {
-            actualiza();
-            checaColision();
-            repaint();    // Se actualiza el <code>Applet</code> repintando el contenido.
+         while (vidas > 0) {
+            if (!pausa) {
+                actualiza();
+                checaColision();
+                repaint(); // Se actualiza el <code>Applet</code> repintando el contenido.
+            }
             try {
                 // El thread se duerme.
                 Thread.sleep(20);
             } catch (InterruptedException ex) {
                 System.out.println("Error en " + ex.toString());
             }
- 
+
         }
+
     }
     
     public void actualiza() {
@@ -169,10 +172,29 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
             pchoco = false;
         }
         
+        if(intentos == 3)
+        {
+            vidas--;
+            intentos = 0;
+            velocidad += 2;
+        }
+        
         //py = velocidad * pelota.getPosY() * tiempoTranscurrido - (.98 * tiempoTranscurrido) * Math.pow(px, px)
         
         //actualiza la posicion de la pelota
         pelota.setPosX(pelota.getPosX() + (int) px);
+        
+        
+        if(caja.getPosX() <= getWidth()/2)
+        {
+            caja.setPosX(getWidth()/2);
+        }
+        if(caja.getPosX() + caja.getAncho() >= getWidth())
+        {
+            caja.setPosX(getWidth() - caja.getAncho());
+        }
+        
+        
         
         }
         
@@ -200,6 +222,34 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
         {
             pchoco = true;
         }
+        
+        
+         if (pelota.getPosX() >= getWidth()) {
+            int posrX = (int) (0);    // posicion en x es un cuarto del applet
+            int posrY = (int) (getHeight() / 2);    // posicion en y es un cuarto del applet
+            pelota.setPosX(posrX);
+            pelota.setPosY(posrY);
+        }
+        if (pelota.getPosY() >= getHeight()) {
+            int posrX = (int) (0);    // posicion en x es un cuarto del applet
+            int posrY = (int) (getHeight() / 2);    // posicion en y es un cuarto del applet
+            pelota.setPosX(posrX);
+            pelota.setPosY(posrY);
+            intentos++;
+        }
+        
+         if (pelota.intersecta(caja) && (pelota.getPosY() + pelota.getAlto() - 5) < caja.getPosY()) {
+            int posrX = (int) (0);    // posicion en x es un cuarto del applet
+            int posrY = (int) (getHeight() / 2);    // posicion en y es un cuarto del applet
+            pelota.setPosX(posrX);
+            pelota.setPosY(posrY);
+            score += 2;
+            // emitir sonido de alegria
+        }
+
+        
+        
+        
         
         
     }
@@ -245,8 +295,16 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
         
         
         g.setColor(Color.black);
-        //g.drawString("Vidas: " + vidas, 10, 20);
+        g.drawString("Vidas: " + vidas, 50, 20);
+        g.setColor(Color.black);
         g.drawString("Score: " + score, 70, 50); 
+        
+        /*if (pausa) {
+                    g.setColor(Color.white);
+                    g.drawString(caja.getpausado(), caja.getPosX() + caja.getAncho() / 3, caja.getPosY() + caja.getAlto() / 2);
+                }
+        */
+        
     }
     
     public void keyPressed(KeyEvent e) {
