@@ -57,6 +57,9 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
     private double angulo; // angulo de la pelota
     private double px,py; // posicion de la pelota con formula
     private int intentos;
+    private double velocidadx,velocidady;
+    private double gravedad = 9.8;
+    private double tiempo;
     
     
     //Variables de control de tiempo de la animación
@@ -104,11 +107,20 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
         addMouseMotionListener(this);  
         
         // variable de la pelota
-        angulo = (int)((Math.random() * (85 - 35)) + 35);
+        angulo = (int) ((Math.random() * (50 - 25)) + 25);
  
-        //movimiento de pelota
-        velocidad = (int) ((Math.random() * (7 - 3)) + 3);
-        px =  velocidad * (Math.cos(angulo));
+        //movimiento de pelota en x
+        velocidad = (int) ((Math.random() * (6 - 4)) + 4);
+        velocidadx =  velocidad * (Math.cos(45));
+        
+        //movimiento de pelota en y
+        //py = -5 + 1 * tiempoActual;
+        
+        
+
+        
+
+        
         
         
   
@@ -127,7 +139,7 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
     @Override
     public void run() {
         //Guarda el tiempo actual del sistema 
-        tiempoActual = System.currentTimeMillis();
+        
         
          while (vidas > 0) {
             if (!pausa) {
@@ -149,10 +161,10 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
     public void actualiza() {
         
          //Determina el tiempo que ha transcurrido desde que el Applet 
-         //inicio su ejecución
-         long tiempoTranscurrido=System.currentTimeMillis() - tiempoActual;
-         //Guarda el tiempo actual
-         tiempoActual += tiempoTranscurrido;
+         
+
+        tiempo += .020;
+        
         
         if(left)
         {
@@ -182,7 +194,11 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
         //py = velocidad * pelota.getPosY() * tiempoTranscurrido - (.98 * tiempoTranscurrido) * Math.pow(px, px)
         
         //actualiza la posicion de la pelota
-        pelota.setPosX(pelota.getPosX() + (int) px);
+        pelota.setPosX(pelota.getPosX() + (int) velocidadx);
+        pelota.setPosY(pelota.getPosY() + (int) velocidady);
+        
+        velocidady = -velocidad + 2 * tiempo;
+        
         
         
         if(caja.getPosX() <= getWidth()/2)
@@ -295,9 +311,9 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
         
         
         g.setColor(Color.black);
-        g.drawString("Vidas: " + vidas, 50, 20);
+        g.drawString("Vidas: " + tiempoActual, 50, 20);
         g.setColor(Color.black);
-        g.drawString("Score: " + score, 70, 50); 
+        g.drawString("Score: " + tiempo, 70, 50); 
         
         /*if (pausa) {
                     g.setColor(Color.white);
