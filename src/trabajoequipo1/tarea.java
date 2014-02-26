@@ -30,6 +30,7 @@ import java.io.PrintWriter;
 import java.io.FileWriter;
 import java.io.IOException; 
 import java.util.Vector;
+import java.io.BufferedReader;
 
 public class tarea extends JFrame implements Runnable, KeyListener,MouseListener,MouseMotionListener {
  
@@ -373,6 +374,50 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
             }
  
     }
+    /**
+     * Metodo que lee a informacion de un archivo y lo agrega a un vector.
+     *
+     * @throws IOException
+     */
+    public void leeArchivo() throws IOException{
+    	BufferedReader fileIn;
+    	try{
+    		fileIn = new BufferedReader(new FileReader(nombreArchivo));
+    	} catch (FileNotFoundException e){
+    		File puntos = new File(nombreArchivo);
+    		PrintWriter fileOut = new PrintWriter(puntos);
+    		fileOut.println("100,demo");
+    		fileOut.close();
+    		fileIn = new BufferedReader(new FileReader(nombreArchivo));
+    	}
+    	String dato = fileIn.readLine();
+
+    	while(dato != null) {
+    		arr = dato.split(",");
+    		int num = (Integer.parseInt(arr[0]));
+    		String nom = arr[1];
+    		vec.add(new Puntaje(nom, num));
+    		dato = fileIn.readLine();
+    	}
+    	fileIn.close();
+    }
+    
+    /**
+     * Metodo que agrega la informacion del vector al archivo.
+     *
+     * @throws IOException
+     */
+    public void grabaArchivo() throws IOException{
+    	PrintWriter fileOut = new PrintWriter(new FileWriter(nombreArchivo));
+    	for (int i=0; i<vec.size(); i++) {
+    		Puntaje x;
+    		x = (Puntaje) vec.get(i);
+    		fileOut.println(x.toString());
+    	}
+    	fileOut.close();	
+    }
+    
+    
     
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_P) //Presiono flecha arriba
