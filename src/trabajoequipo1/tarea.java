@@ -64,6 +64,7 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
     private boolean btiempo;
     private boolean instrucciones = false;
     private boolean inst = false;
+    private boolean pclic = false;
     
     
     private Vector vec;    // Objeto vector para agregar el puntaje.
@@ -178,21 +179,27 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
             velocidad += 1;
         }
         
-        if(clic)
+        if(!pausa)
         {
+            if(clic)
+            {
             
-            velocidadx =  velocidad * (Math.sin(Math.toRadians(angulo)));
+                velocidadx =  velocidad * (Math.sin(Math.toRadians(angulo)));
         
-            //velocidad de y
-            velocidady = -velocidad + 2.5 * tiempo;
+                //velocidad de y
+                velocidady = -velocidad + 2.5 * tiempo;
             
-            //boolean para tiempo
-            btiempo = true;
+                //boolean para tiempo
+                btiempo = true;
             
-            //actualziacion de posicion
-            pelota.setPosX(pelota.getPosX() + (int) velocidadx);
-            pelota.setPosY(pelota.getPosY() + (int) velocidady);
+                //actualziacion de posicion
+                pelota.setPosX(pelota.getPosX() + (int) velocidadx);
+                pelota.setPosY(pelota.getPosY() + (int) velocidady);
+            } 
         }
+        
+        
+        
         
         
         if(left)
@@ -421,12 +428,17 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
     }
  
      public void mouseClicked(MouseEvent e) {
-        x1 = e.getX();
+       
+         if(!pausa)
+         {
+             x1 = e.getX();
         y1 = e.getY();
         if(pelota.tiene(x1, y1))
         {
             clic = true;
         }
+         }
+        
         
     }
  
