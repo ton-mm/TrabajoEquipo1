@@ -23,6 +23,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.ImageIcon;
 import java.awt.Toolkit;
+import java.util.Vector;
 
 public class tarea extends JFrame implements Runnable, KeyListener,MouseListener,MouseMotionListener {
  
@@ -61,6 +62,13 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
     private double gravedad = 9.8;
     private double tiempo;
     private boolean btiempo;
+    private boolean instrucciones = false;
+    private boolean inst = false;
+    
+    
+    private Vector vec;    // Objeto vector para agregar el puntaje.
+    private String nombreArchivo;    //Nombre del archivo.
+    private String[] arr;    //Arreglo del archivo divido.
     
     
     //Variables de control de tiempo de la animación
@@ -75,6 +83,10 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
     }
     
     public void init() {
+        nombreArchivo = "Puntaje.txt";
+        vec = new Vector();
+        
+        
         direccion = 0;
         this.setSize(1000, 700);
         URL eURL = this.getClass().getResource("Imagenes/bola.png");
@@ -291,7 +303,7 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
             dbImage = createImage(this.getSize().width, this.getSize().height);
             dbg = dbImage.getGraphics();
         }
- 
+        
         // Actualiza la imagen de fondo.
         dbg.setColor(getBackground());
         dbg.fillRect(0, 0, this.getSize().width, this.getSize().height);
@@ -319,7 +331,7 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
         else{
             g.drawImage(gameover, 400, 150, this);
         }
-        
+   
         //
         g.drawImage(caja.getImagenI(), caja.getPosX(), caja.getPosY(), this);
         
@@ -336,13 +348,28 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
                     g.drawString(caja.getpausado(), caja.getPosX() + caja.getAncho() / 3, caja.getPosY() + caja.getAlto() / 2);
                 }
         */
-        
+                if (instrucciones ) {
+                
+               g.setColor(Color.black);
+               g.drawString("INSTRUCCIONES: Para empezar el juego dar click a la pelota. Intenta cachar", 200, 200); 
+                    g.drawString(    "la pelota con la caja. Mueve la caja con las flechas IZQ y DER", 200, 212); 
+                     g.drawString(   "Para pausar el juego presiona 'p' ", 200, 225); 
+                     g.drawString(   "Para guardar el juego presiona 'g'", 200, 238); 
+                    g.drawString(    "Para cargar el juego presiona 'c'  ", 200, 250); 
+            }
+ 
     }
     
     public void keyPressed(KeyEvent e) {
         if (e.getKeyCode() == KeyEvent.VK_P) //Presiono flecha arriba
         {    
             pausa = !pausa;
+        }
+        
+        if (e.getKeyCode() == KeyEvent.VK_I) //Presiono flecha arriba
+        {    
+            instrucciones = !instrucciones;
+            //pausa = !pausa;
         }
        
         
