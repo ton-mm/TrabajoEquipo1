@@ -23,6 +23,12 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import javax.swing.ImageIcon;
 import java.awt.Toolkit;
+import java.io.FileReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.FileWriter;
+import java.io.IOException; 
 import java.util.Vector;
 
 public class tarea extends JFrame implements Runnable, KeyListener,MouseListener,MouseMotionListener {
@@ -66,7 +72,7 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
     private boolean inst = false;
     private boolean pclic = false;
     
-    
+    //variables para el manejo de archivos
     private Vector vec;    // Objeto vector para agregar el puntaje.
     private String nombreArchivo;    //Nombre del archivo.
     private String[] arr;    //Arreglo del archivo divido.
@@ -84,6 +90,7 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
     }
     
     public void init() {
+        
         nombreArchivo = "Puntaje.txt";
         vec = new Vector();
         
@@ -120,10 +127,10 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
         addMouseMotionListener(this); 
         
         // variable de la pelota
-            angulo = (int) ((Math.random() * (60 - 45)) + 45);
+        angulo = (int) ((Math.random() * (60 - 45)) + 45);
  
-            //movimiento de pelota en x
-            velocidad = (int) ((Math.random() * (6 - 4)) + 4);
+        //movimiento de pelota en x
+        velocidad = (int) ((Math.random() * (6 - 4)) + 4);
         
         
         
