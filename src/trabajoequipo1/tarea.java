@@ -78,6 +78,8 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
     private String nombreArchivo;    //Nombre del archivo.
     private String[] arr;    //Arreglo del archivo divido.
     
+    private boolean guardar = false; //bool para saber si se quiere guardar el juego
+    
     
     //Variables de control de tiempo de la animación
     private long tiempoActual;
@@ -408,13 +410,15 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
      * @throws IOException
      */
     public void grabaArchivo() throws IOException{
-    	PrintWriter fileOut = new PrintWriter(new FileWriter(nombreArchivo));
-    	for (int i=0; i<vec.size(); i++) {
-    		Puntaje x;
-    		x = (Puntaje) vec.get(i);
-    		fileOut.println(x.toString());
-    	}
-    	fileOut.close();	
+        
+        if(guardar) {
+            
+            PrintWriter fileOut = new PrintWriter(new FileWriter(nombreArchivo));
+            fileOut.println(""+pelota.getPosX()+","+pelota.getPosY());
+            fileOut.close();
+            
+        }
+   	
     }
     
     
@@ -429,6 +433,11 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
         {    
             instrucciones = !instrucciones;
             //pausa = !pausa;
+        }
+        
+        if (e.getKeyCode() == KeyEvent.VK_G) //Presiono flecha arriba
+        {    
+            guardar = true;
         }
        
         
