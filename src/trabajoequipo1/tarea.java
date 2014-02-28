@@ -79,6 +79,7 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
     private String[] arr;    //Arreglo del archivo divido.
     
     private boolean guardar = false; //bool para saber si se quiere guardar el juego
+    private boolean cargar = false; //bool para saber si se quiere cargar el juego
     
     
     //Variables de control de tiempo de la animación
@@ -358,7 +359,7 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
         g.setColor(Color.black);
         g.drawString("Score: " + score, 70, 50); 
         g.setColor(Color.black);
-        g.drawString("Int: " + intentos, 120, 50);
+        g.drawString("Intentos: " + intentos, 140, 50);
         
         /*if (pausa) {
                     g.setColor(Color.white);
@@ -382,7 +383,8 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
      * @throws IOException
      */
     public void leeArchivo() throws IOException{
-    	BufferedReader fileIn;
+    	//if(cargar) {
+        BufferedReader fileIn;
     	try{
     		fileIn = new BufferedReader(new FileReader(nombreArchivo));
     	} catch (FileNotFoundException e){
@@ -397,11 +399,16 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
     	while(dato != null) {
     		arr = dato.split(",");
     		int num = (Integer.parseInt(arr[0]));
-    		String nom = arr[1];
-    		vec.add(new Puntaje(nom, num));
+    		int nom = (Integer.parseInt (arr[1]));
+                int nom2 = (Integer.parseInt (arr[2]));
+    		//vec.add(new Puntaje(nom, num));
+                pelota.setPosX(num);
+                pelota.setPosY(nom);
+                score = nom2;
     		dato = fileIn.readLine();
     	}
     	fileIn.close();
+        //}
     }
     
     /**
@@ -411,33 +418,54 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
      */
     public void grabaArchivo() throws IOException{
         
-        if(guardar) {
+        //if(guardar) {
             
+            yay.play();
             PrintWriter fileOut = new PrintWriter(new FileWriter(nombreArchivo));
-            fileOut.println(""+pelota.getPosX()+","+pelota.getPosY());
+            fileOut.println(""+pelota.getPosX()+","+pelota.getPosY()+","+score);
             fileOut.close();
-            
-        }
+           
+           // guardar = false;
+        //}
    	
     }
     
     
     
     public void keyPressed(KeyEvent e) {
-        if (e.getKeyCode() == KeyEvent.VK_P) //Presiono flecha arriba
+        if (e.getKeyCode() == KeyEvent.VK_P) //Presiono tecla P
         {    
             pausa = !pausa;
         }
         
-        if (e.getKeyCode() == KeyEvent.VK_I) //Presiono flecha arriba
+        if (e.getKeyCode() == KeyEvent.VK_I) //Presiono tecla I
         {    
             instrucciones = !instrucciones;
             //pausa = !pausa;
         }
         
-        if (e.getKeyCode() == KeyEvent.VK_G) //Presiono flecha arriba
-        {    
-            guardar = true;
+        if (e.getKeyCode() == KeyEvent.VK_G) //Presiono tecla G
+        {  
+            try{
+			//leeArchivo();    //lee el contenido del archivo
+			//vec.add(new Puntaje(nombre,score));    //Agrega el contenido del nuevo puntaje al vector.
+			grabaArchivo();    //Graba el vector en el archivo.
+		}catch(IOException i){
+			System.out.println("Error en " + i.toString());
+		}
+            //guardar = true;
+        }
+        
+        if (e.getKeyCode() == KeyEvent.VK_C) //Presiono tecla C
+        {   
+            try{
+			leeArchivo();    //lee el contenido del archivo
+			//vec.add(new Puntaje(nombre,score));    //Agrega el contenido del nuevo puntaje al vector.
+			//grabaArchivo();    //Graba el vector en el archivo.
+		}catch(IOException i){
+			System.out.println("Error en " + i.toString());
+		}
+            //cargar = true;
         }
        
         
