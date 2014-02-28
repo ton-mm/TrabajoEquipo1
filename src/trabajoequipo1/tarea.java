@@ -398,13 +398,25 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
 
     	while(dato != null) {
     		arr = dato.split(",");
-    		int num = (Integer.parseInt(arr[0]));
-    		int nom = (Integer.parseInt (arr[1]));
-                int nom2 = (Integer.parseInt (arr[2]));
+    		int num0 = (Integer.parseInt(arr[0]));
+    		int num1 = (Integer.parseInt (arr[1]));
+                double num2 = (Double.parseDouble (arr[2]));//velx
+                double num3 = (Double.parseDouble (arr[3]));//vely
+                double num4 = (Double.parseDouble (arr[4]));//angulo
+                int num5 = (Integer.parseInt (arr[5]));//score
+                int num6 = (Integer.parseInt (arr[6]));//velocidad
+                double num7 = (Double.parseDouble (arr[7]));//tiempo
+                boolean num8 = (Boolean.parseBoolean (arr[8]));//tiempo
     		//vec.add(new Puntaje(nom, num));
-                pelota.setPosX(num);
-                pelota.setPosY(nom);
-                score = nom2;
+                
+                double vx1 =  num6 * (Math.sin(Math.toRadians(num4)));
+                double vy1 = -num6 + 2.5 * num7;
+                
+                btiempo = num8;
+                
+                pelota.setPosX(num0 + (int) vx1);
+                pelota.setPosY(num1 + (int) vy1);
+                //score = nom2;
     		dato = fileIn.readLine();
     	}
     	fileIn.close();
@@ -422,7 +434,7 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
             
             yay.play();
             PrintWriter fileOut = new PrintWriter(new FileWriter(nombreArchivo));
-            fileOut.println(""+pelota.getPosX()+","+pelota.getPosY()+","+score);
+            fileOut.println(""+pelota.getPosX()+","+pelota.getPosY()+","+velocidadx+","+velocidady+","+angulo+","+score+","+velocidad+","+tiempo+","+btiempo);
             fileOut.close();
            
            // guardar = false;
