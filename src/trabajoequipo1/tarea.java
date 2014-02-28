@@ -439,7 +439,7 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
         
         //if(guardar) {
             
-            yay.play();
+            
             PrintWriter fileOut = new PrintWriter(new FileWriter(nombreArchivo));
             fileOut.println(""+velocidadx+","+velocidady+","+angulo+","+tiempo+","+vidas+","+pelota.getPosX()+","+pelota.getPosY()+","+caja.getPosX()+","+caja.getPosY());
             fileOut.close();
