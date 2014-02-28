@@ -382,46 +382,53 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
      *
      * @throws IOException
      */
-    public void leeArchivo() throws IOException{
-    	//if(cargar) {
-        BufferedReader fileIn;
-    	try{
-    		fileIn = new BufferedReader(new FileReader(nombreArchivo));
-    	} catch (FileNotFoundException e){
-    		File puntos = new File(nombreArchivo);
-    		PrintWriter fileOut = new PrintWriter(puntos);
-    		fileOut.println("100,demo");
-    		fileOut.close();
-    		fileIn = new BufferedReader(new FileReader(nombreArchivo));
-    	}
-    	String dato = fileIn.readLine();
-
-    	while(dato != null) {
-    		arr = dato.split(",");
-    		int num0 = (Integer.parseInt(arr[0]));
-    		int num1 = (Integer.parseInt (arr[1]));
-                double num2 = (Double.parseDouble (arr[2]));//velx
-                double num3 = (Double.parseDouble (arr[3]));//vely
-                double num4 = (Double.parseDouble (arr[4]));//angulo
-                int num5 = (Integer.parseInt (arr[5]));//score
-                int num6 = (Integer.parseInt (arr[6]));//velocidad
-                double num7 = (Double.parseDouble (arr[7]));//tiempo
-                boolean num8 = (Boolean.parseBoolean (arr[8]));//tiempo
-    		//vec.add(new Puntaje(nom, num));
+    public void leeArchivo()  {
+          try
+          {
+                BufferedReader fileIn;
+                try {
+                        fileIn = new BufferedReader(new FileReader(nombreArchivo));
+                } catch (FileNotFoundException e){
+                        File archivo = new File(nombreArchivo);
+                        PrintWriter fileOut = new PrintWriter(archivo);
+                        fileOut.println("50.0,50.0,45.0,.02,5,.02,50,50,200,200");
+                        fileOut.close();
+                        fileIn = new BufferedReader(new FileReader(nombreArchivo));
+                }
+                String dato = fileIn.readLine();
+                arr = dato.split (",");
+                velocidadx = (Double.parseDouble(arr[0]));
+                velocidady = (Double.parseDouble(arr[1]));
+                angulo = (Double.parseDouble(arr[2]));
+                tiempo = (Double.parseDouble(arr[3]));
+                vidas = (Integer.parseInt(arr[4]));
+                //dificultad = (Double.parseDouble(arr[5]));
+                pelota.setPosX((Integer.parseInt(arr[5])));
+                pelota.setPosY((Integer.parseInt(arr[6])));
+                caja.setPosX((Integer.parseInt(arr[7])));
+                caja.setPosY((Integer.parseInt(arr[8])));
+                //perdida = (Integer.parseInt(arr[10]));
+                //pico = (Boolean.parseBoolean(arr[11]));
                 
-                double vx1 =  num6 * (Math.sin(Math.toRadians(num4)));
-                double vy1 = -num6 + 2.5 * num7;
-                
-                btiempo = num8;
-                
-                pelota.setPosX(num0 + (int) vx1);
-                pelota.setPosY(num1 + (int) vy1);
-                //score = nom2;
-    		dato = fileIn.readLine();
-    	}
-    	fileIn.close();
-        //}
-    }
+                fileIn.close();
+          }
+          catch(IOException ioe) {
+              velocidadx = 0;
+              velocidady = 0;
+              angulo = 0;
+              tiempo = 0;
+              vidas = 0;
+              //dificultad = 0;
+              pelota.setPosX(0);
+              pelota.setPosY(0);
+              caja.setPosX(0);
+              caja.setPosY(0);
+              //perdida = 0;
+              //pico = false;
+              
+              
+          }
+        }
     
     /**
      * Metodo que agrega la informacion del vector al archivo.
@@ -434,7 +441,7 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
             
             yay.play();
             PrintWriter fileOut = new PrintWriter(new FileWriter(nombreArchivo));
-            fileOut.println(""+pelota.getPosX()+","+pelota.getPosY()+","+velocidadx+","+velocidady+","+angulo+","+score+","+velocidad+","+tiempo+","+btiempo);
+            fileOut.println(""+velocidadx+","+velocidady+","+angulo+","+tiempo+","+vidas+","+pelota.getPosX()+","+pelota.getPosY()+","+caja.getPosX()+","+caja.getPosY());
             fileOut.close();
            
            // guardar = false;
@@ -470,14 +477,7 @@ public class tarea extends JFrame implements Runnable, KeyListener,MouseListener
         
         if (e.getKeyCode() == KeyEvent.VK_C) //Presiono tecla C
         {   
-            try{
-			leeArchivo();    //lee el contenido del archivo
-			//vec.add(new Puntaje(nombre,score));    //Agrega el contenido del nuevo puntaje al vector.
-			//grabaArchivo();    //Graba el vector en el archivo.
-		}catch(IOException i){
-			System.out.println("Error en " + i.toString());
-		}
-            //cargar = true;
+            leeArchivo();
         }
        
         
